@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zaquedle</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="menu-ativo">
+
+<h1 id="titulo">Zaquedle</h1>
+
+<div class="menu" id="menu">
+  <button class="bloqueado" disabled>Clássico (em breve)</button>
+  <button id="botaoPersonagem">Personagem</button>
+  <button id="botaoTierlist">Tier list</button>
+</div>
+
+<!-- Modo clássico -->
+<div class="pagina" id="classico">
+  <div class="instrucoes">
+    <h2>Modo Clássico</h2>
+    <p>Adivinhe o baldinho! Digite o nome de alguém do canal/chat.</p>
+  </div>
+  <div class="campo-busca">
+    <input type="text" id="palpite" placeholder="Digite o nome do personagem" aria-label="Nome do personagem" autocomplete="off" oninput="mostrarSugestoes()" onkeydown="if(event.key === 'Enter'){ event.preventDefault(); verificar(); }">
+    <div id="sugestoes" class="caixa-sugestoes"></div>
+  </div>
+  <button class="voltar" onclick="verificar()">Chutar</button>
+
+  <div id="resultados-wrapper">
+    <table id="resultados">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Característica</th>
+          <th>Característica</th>
+          <th>Característica</th>
+          <th>Característica</th>
+        </tr>
+      </thead>
+   <tbody id="corpoResultados"></tbody>
+  </table>
+  </div>
+</div>
+
+<!-- Modo personagem (foto distorcida) -->
+<div class="pagina" id="personagem">
+  <div class="instrucoes">
+    <h2>Personagem</h2>
+    <p>Qual personagem/participante do canal/chat é baseado em sua versão tomodachi.</p>
+  </div>
+
+  <svg width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="filtroDistorcao">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04 0.07" numOctaves="3" seed="7" result="ruido"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="ruido" scale="90" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+    </filter>
+  </svg>
+
+  <div class="foto-container foto-container--retrato">
+    <img id="fotoPersonagem" class="foto-jogo" src="" alt="Foto distorcida de um personagem do canal/chat">
+  </div>
+
+  <div class="campo-busca">
+    <input type="text" id="palpitePersonagem" placeholder="Digite o nome do personagem" aria-label="Nome do personagem" autocomplete="off">
+    <div id="sugestoesPersonagem" class="caixa-sugestoes"></div>
+  </div>
+  <button class="voltar" id="botaoChutarPersonagem">Chutar</button>
+
+  <div id="dicaPersonagem" class="dica-personagem oculto" aria-live="polite"></div>
+
+  <div id="resultados-wrapper-personagem">
+    <table id="resultadosPersonagem" class="tabela-resultado-foto">
+      <thead>
+        <tr>
+          <th>Personagem</th>
+        </tr>
+      </thead>
+      <tbody id="corpoResultadosPersonagem"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modo tier list -->
+<div class="pagina" id="tierlist">
+  <div class="instrucoes">
+    <h2>Tier List</h2>
+    <p>Qual é o vídeo do Zaquelsinho?</p>
+  </div>
+
+  <div class="foto-container foto-container--paisagem">
+    <img id="fotoSecreta" class="foto-jogo" src="" alt="Foto misteriosa">
+  </div>
+
+  <div class="campo-busca">
+    <input type="text" id="palpiteFoto" placeholder="Digite o nome da tier list" aria-label="Nome da tier list" autocomplete="off">
+    <div id="sugestoesFoto" class="caixa-sugestoes"></div>
+  </div>
+  <button class="voltar" id="botaoChutarFoto">Chutar</button>
+
+  <div id="resultados-wrapper-foto">
+    <table id="resultadosFoto" class="tabela-resultado-foto">
+      <thead>
+        <tr>
+          <th>Tier list</th>
+        </tr>
+      </thead>
+      <tbody id="corpoResultadosFoto"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal de vitória (comum aos dois modos) -->
+<div class="overlay" id="overlayVitoria">
+  <div class="modal-vitoria" id="caixaVitoria" role="dialog" aria-modal="true" aria-labelledby="tituloVitoria">
+    <h2 id="tituloVitoria">Você acertou:</h2>
+    <img id="fotoAcertadaModal" class="foto-acertada oculto" src="" alt="">
+    <div class="nome-personagem" id="nomeAcertado"></div>
+    <div class="tentativas" id="tentativasTexto"></div>
+
+    <div class="sugestao">
+      <p>Outros modos:</p>
+      <button class="bloqueado" disabled>Clássico (em breve)</button>
+      <button id="botaoPersonagemModal">Personagem</button>
+    </div>
+
+    <button class="fechar-modal" id="botaoFecharVitoria">Fechar</button>
+  </div>
+</div>
+
+<!-- Links flutuantes (canal e Amazon) -->
+<a class="canal" href="https://www.youtube.com/@GabrielZaquel" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2c-.3-1.1-1.1-1.9-2.2-2.2C19.4 3.5 12 3.5 12 3.5s-7.4 0-9.3.5C1.6 4.3.8 5.1.5 6.2.1 8.1.1 12 .1 12s0 3.9.4 5.8c.3 1.1 1.1 1.9 2.2 2.2 1.9.5 9.3.5 9.3.5s7.4 0 9.3-.5c1.1-.3 1.9-1.1 2.2-2.2.4-1.9.4-5.8.4-5.8s0-3.9-.4-5.8zM9.6 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+  apoie o roliço
+</a>
+
+<a class="canal canal-direita" href="https://www.amazon.com.br/?&linkCode=sl2&tag=zaquel0f-20&linkId=4663d12ed1c5f15c35abddd0e90c108a&ref_=as_li_ss_tl" target="_blank" rel="noopener">
+  🛒 clique no link da amazon
+</a>
+<script src="script.js"></script>
+</body>
+</html>
